@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Little Column B | KindaSharp</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #F5F5F7;
+            --text-primary: #1D1D1F;
+            --text-secondary: #86868B;
+            --accent-color: #6e8e7f;
+            --card-bg: #FFFFFF;
+            --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --max-width: 1080px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: sticky; top: 0; width: 100%; height: 54px;
+            background: rgba(245, 245, 247, 0.7);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+        }
+        .nav-content { display: flex; justify-content: space-between; width: 100%; max-width: var(--max-width); padding: 0 20px; }
+        .logo { font-weight: 600; font-size: 1.2rem; text-decoration: none; color: var(--text-primary); }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; margin-left: 24px; }
+        .nav-links a:hover { color: var(--text-primary); }
+
+
+        /* --- LIGHTBOX --- */
+        #lightbox {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: none; 
+            align-items: center; 
+            justify-content: center;
+            z-index: 2000;
+            cursor: zoom-out;
+        }
+        #lightbox img { 
+            max-width: 90%; 
+            max-height: 85%; 
+            border-radius: 12px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15); 
+        }
+        /* --- HEADER --- */
+        .page-header {
+            text-align: center;
+            padding: 80px 20px 60px 20px;
+        }
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .page-header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- CONTAINER --- */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px 80px 20px;
+        }
+
+        /* --- PROJECT CARDS GRID --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .project-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            background-color: #eee;
+            cursor: zoom-in;
+        }
+
+        .project-content {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .project-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .project-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .project-link {
+            display: inline-block;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 2px solid var(--text-primary);
+            padding-bottom: 2px;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-link:hover {
+            opacity: 0.6;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 2.5rem; }
+            .projects-grid { grid-template-columns: 1fr; gap: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">kindaSharp.</a>
+            <div class="nav-links">
+                <a href="column-a.html">Column A</a>
+                <a href="column-b.html">Column B</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>A Little Column B</h1>
+        <p>Endeavors, experiments, and carefully calibrated efforts from the other side.</p>
+    </header>
+
+    <main class="container">
+        <div class="projects-grid">
+
+            <!-- PROJECT CARD TEMPLATE - Duplicate this section for each new project -->
+            <article class="project-card">
+                <img src="assets/adequatousity-comic.jpg" alt="adequatousity" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-title">Adequatousity</h2>
+                    <time class="project-date">January 2026</time>
+                    <p class="project-description">
+                        A two-panel exploration of the tension between perfectionism and productivity. Sometimes the adequate answer is the honest one, and the only way forward is to accept that done beats perfect.
+                    </p>
+                    <a href="adequatousity.html" class="project-link">View Project →</a>
+                </div>
+            </article>
+
+            <!-- Example card without link -->
+            <article class="project-card">
+                <img src="assets/Albany NY.jpg" alt="Leaving Woodstock 94" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-title">Documenting Woodstock 94</h2>
+                    <time class="project-date">December 2025</time>
+                    <p class="project-description">
+                        Armed with a crappy point annd shoot Canon 35mm camera my dad picked up at one of many Saturday afternoon auction treasure hunts, I snapped away at one of the most memorable weekends of my life up until that point.
+                    </p>
+                    <a href="ancestry-project.html" class="project-link">Learn More →</a>
+                </div>
+            </article>
+
+            <!-- Example card - short description -->
+            <article class="project-card">
+                <img src="assets/project-image-3.jpg" alt="Garden experiment" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-title">The Tomato Experiment</h2>
+                    <time class="project-date">Summer 2025</time>
+                    <p class="project-description">
+                        An attempt at growing heirloom tomatoes. Results were adequately mixed. Some thrived, others did not. The ones that survived were delicious.
+                    </p>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 KindaSharp. All rights reserved.</p>
+    </footer>
+
+    <div id="lightbox" onclick="this.style.display='none'">
+    <img id="lightbox-img" src="" alt="Project image">
+</div>
+
+<script>
+    // Lightbox functionality
+    document.querySelectorAll('.project-image').forEach(img => {
+        img.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevents card click if you have that
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = this.src;
+            lightbox.style.display = 'flex';
+        });
+    });
+</script>
+
+</body>
+</html>
