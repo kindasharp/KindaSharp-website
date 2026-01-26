@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Title | KindaSharp</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #F5F5F7;
+            --text-primary: #1D1D1F;
+            --text-secondary: #86868B;
+            --accent-color: #6e8e7f;
+            --card-bg: #FFFFFF;
+            --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --max-width: 1080px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: sticky; top: 0; width: 100%; height: 54px;
+            background: rgba(245, 245, 247, 0.7);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+        }
+        .nav-content { display: flex; justify-content: space-between; width: 100%; max-width: var(--max-width); padding: 0 20px; }
+        .logo { font-weight: 600; font-size: 1.2rem; text-decoration: none; color: var(--text-primary); }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; margin-left: 24px; }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        /* --- CONTAINER --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px 80px 20px;
+        }
+
+        /* --- BACK LINK --- */
+        .back-link {
+            display: inline-block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover { color: var(--text-primary); }
+
+        /* --- HEADER --- */
+        .project-header {
+            margin-bottom: 40px;
+        }
+        .project-header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        .project-meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- CONTENT BLOCKS --- */
+        .content-section {
+            margin-bottom: 40px;
+        }
+
+        .content-section h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            margin-top: 48px;
+        }
+
+        .content-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            margin-top: 32px;
+        }
+
+        .content-section p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .content-section ul, .content-section ol {
+            margin-left: 24px;
+            margin-bottom: 20px;
+        }
+
+        .content-section li {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+
+        /* --- IMAGES --- */
+        .content-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin: 32px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .image-caption {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 12px;
+            font-style: italic;
+        }
+
+        /* --- DIVIDER --- */
+        .divider {
+            border: none;
+            border-top: 1px solid #E5E5E5;
+            margin: 48px 0;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .content-section h2 { font-size: 1.5rem; }
+            .content-section p, .content-section li { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">kindaSharp.</a>
+            <div class="nav-links">
+                <a href="column-a.html">Column A</a>
+                <a href="column-b.html">Column B</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <a href="column-b.html" class="back-link">← Back to Column B</a>
+
+        <header class="project-header">
+            <h1>Documenting Woodstock 94</h1>
+            <p class="project-meta">January 2026</p>
+        </header>
+
+        <div class="content-section">
+            <!-- PASTE YOUR CONTENT BELOW THIS LINE -->
+
+            <p><EM>This is a work in progrees and is mostly placeholder copy for now.</EM></p>
+            <p>In the summer of 1994, I grabbed a camera and headed to what was supposed to be a corporate nostalgia cash-grab. Turns out, 350,000 people in the mud can't all be wrong—or adequately prepared.</p>
+
+            <img src="assets/woodstock-muddy.jpg" alt="woodstock 94 mud" class="content-image">
+            <p class="image-caption">Adequate documentation of an inadequate amount of porta-potties</p>
+
+            <h2>The Setup</h2>
+            <p>Add more paragraphs and content here. The typography is clean and readable, with good spacing between elements.</p>
+
+            <h3>What I Packed</h3>
+            <p>Dusted off my Boy Scouts era back pack.</p>
+
+            <ul>
+                <li>One CANON Sure Shot 35mm Film Camera (adequate for the era)</li>
+                <li>Three rolls of Kodak Tri-X 400 (not nearly adequate)</li>
+                <li>Rain gear (laughably inadequate)</li>
+            </ul>
+
+            <hr class="divider">
+
+            <h2>The Moments Between the Moments</h2>
+            <p>Everyone remembers Nine Inch Nails covered in mud. Fewer people remember the guy in the Phish shirt who shared his Pop-Tart with a stranger during the downpour, or the impromptu drum circle that lasted through dawn while Red Hot Chili Peppers sound-checked. These photos aren't about the stages. They're about the adequate chaos in between.</p>
+
+            <!-- PASTE YOUR CONTENT ABOVE THIS LINE -->
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 KindaSharp. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
