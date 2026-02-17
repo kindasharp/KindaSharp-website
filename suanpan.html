@@ -133,6 +133,15 @@
       min-width: 260px;
     }
 
+    /* --- SCROLL WRAPPER for mobile --- */
+    .frame-scroll-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
     /* --- FRAME --- */
     .suanpan-frame {
       position: relative;
@@ -141,6 +150,7 @@
       border-radius: 8px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,230,160,0.2);
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .rods-layer {
@@ -195,6 +205,8 @@
       left: 4px;
       cursor: pointer;
       user-select: none;
+      /* Prevent the browser from claiming this touch for scrolling */
+      touch-action: none;
       transition: top 0.15s cubic-bezier(0.4,0,0.2,1), background 0.1s, box-shadow 0.1s;
       z-index: 6;
     }
@@ -224,6 +236,8 @@
       border-radius: 20px;
       transition: all 0.2s;
       text-transform: uppercase;
+      /* Prevent scroll on tap-hold of button */
+      touch-action: manipulation;
     }
     .reset-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
 
@@ -244,7 +258,7 @@
 
     @media (max-width: 768px) {
       .project-header h1 { font-size: 2rem; }
-      .suanpan-card { padding: 24px 8px; overflow-x: auto; }
+      .suanpan-card { padding: 24px 12px; }
     }
   </style>
 </head>
@@ -269,7 +283,7 @@
     </header>
 
     <div class="content-section">
-      <p>My neighbor handed me a Chinese suanpan the other day, and one thing led to another. This is an interactive version you can use alongside the real thing. Click any bead to slide it toward the center beam; the value updates in real time.</p>
+      <p>My neighbor handed me a Chinese suanpan the other day, and one thing led to another. This is an interactive version you can use alongside the real thing. Tap any bead to slide it toward the center beam; the value updates in real time.</p>
       <p>The suanpan predates the Japanese soroban by centuries and has a slightly more generous layout: two beads above the beam worth 5 each, and five beads below worth 1 each. In practice you use 0–9 per column for everyday arithmetic, but the extra beads give you room for intermediate steps and hexadecimal calculation.</p>
     </div>
 
@@ -280,13 +294,16 @@
         <div class="suanpan-display-number" id="display">0</div>
       </div>
 
-      <div class="suanpan-frame" id="frame"></div>
+      <!-- Scroll wrapper lets mobile users pan if the frame is wider than the screen -->
+      <div class="frame-scroll-wrapper">
+        <div class="suanpan-frame" id="frame"></div>
+      </div>
 
       <div class="suanpan-labels" id="labels"></div>
 
       <button class="reset-btn" id="resetBtn">Reset</button>
 
-      <p class="suanpan-hint">Click a bead to slide it — and all beads between it and the beam</p>
+      <p class="suanpan-hint">Tap a bead to slide it — and all beads between it and the beam</p>
 
     </div>
 
@@ -355,23 +372,37 @@
     render();
   }
 
+  // Attach both click (mouse) and touchstart (mobile) to a bead.
+  // On touch we call preventDefault() to stop the page scrolling,
+  // then fire the same handler as a click would.
+  function addBeadListeners(el, handler) {
+    el.addEventListener('click', handler);
+    el.addEventListener('touchstart', function(e) {
+      e.preventDefault();   // stop scroll / zoom
+      handler();
+    }, { passive: false });
+  }
+
   function buildDOM() {
     const frame = document.getElementById('frame');
     frame.innerHTML = '';
 
+    // Rods
     const rodsLayer = document.createElement('div');
     rodsLayer.className = 'rods-layer';
     for (let ci = 0; ci < NUM_COLS; ci++) {
       const wrap = document.createElement('div'); wrap.className = 'rod-wrap';
-      const rod = document.createElement('div'); rod.className = 'rod';
+      const rod  = document.createElement('div'); rod.className  = 'rod';
       wrap.appendChild(rod); rodsLayer.appendChild(wrap);
     }
     frame.appendChild(rodsLayer);
 
+    // Top rail
     const topRail = document.createElement('div');
     topRail.className = 'rail rail-top';
     frame.appendChild(topRail);
 
+    // Heaven section
     const heavenSection = document.createElement('div');
     heavenSection.className = 'section heaven-section';
     for (let ci = 0; ci < NUM_COLS; ci++) {
@@ -381,21 +412,23 @@
         bead.className = 'bead inactive';
         bead.id = `h-${ci}-${bi}`;
         bead.style.top = heavenTop(columns[ci].heaven, bi) + 'px';
-        bead.addEventListener('click', () => clickHeaven(ci, bi));
+        addBeadListeners(bead, () => clickHeaven(ci, bi));
         col.appendChild(bead);
       }
       heavenSection.appendChild(col);
     }
     frame.appendChild(heavenSection);
 
+    // Beam
     const beam = document.createElement('div'); beam.className = 'beam';
     for (let ci = 0; ci < NUM_COLS; ci++) {
       const wrap = document.createElement('div'); wrap.className = 'beam-dot-wrap';
-      const dot = document.createElement('div'); dot.className = 'beam-dot';
+      const dot  = document.createElement('div'); dot.className  = 'beam-dot';
       wrap.appendChild(dot); beam.appendChild(wrap);
     }
     frame.appendChild(beam);
 
+    // Earth section
     const earthSection = document.createElement('div');
     earthSection.className = 'section earth-section';
     for (let ci = 0; ci < NUM_COLS; ci++) {
@@ -405,17 +438,19 @@
         bead.className = 'bead inactive';
         bead.id = `e-${ci}-${bi}`;
         bead.style.top = earthTop(columns[ci].earth, bi) + 'px';
-        bead.addEventListener('click', () => clickEarth(ci, bi));
+        addBeadListeners(bead, () => clickEarth(ci, bi));
         col.appendChild(bead);
       }
       earthSection.appendChild(col);
     }
     frame.appendChild(earthSection);
 
+    // Bottom rail
     const bottomRail = document.createElement('div');
     bottomRail.className = 'rail rail-bottom';
     frame.appendChild(bottomRail);
 
+    // Place-value labels (outside the frame, inside scroll wrapper)
     const labelsEl = document.getElementById('labels');
     labelsEl.innerHTML = '';
     for (let ci = 0; ci < NUM_COLS; ci++) {
