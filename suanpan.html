@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suanpan 算盤 | KindaSharp</title>
+
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #F5F5F7;
+      --text-primary: #1D1D1F;
+      --text-secondary: #86868B;
+      --accent-color: #6e8e7f;
+      --card-bg: #FFFFFF;
+      --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --max-width: 1080px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      font-family: var(--font-stack);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* --- NAVIGATION --- */
+    nav {
+      position: sticky; top: 0; width: 100%; height: 54px;
+      background: rgba(245, 245, 247, 0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      z-index: 1000; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-content { display: flex; justify-content: space-between; width: 100%; max-width: var(--max-width); padding: 0 20px; }
+    .logo { font-weight: 600; font-size: 1.2rem; text-decoration: none; color: var(--text-primary); }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; margin-left: 24px; }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* --- CONTAINER --- */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 20px 80px 20px;
+    }
+
+    /* --- BACK LINK --- */
+    .back-link {
+      display: inline-block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+      transition: color 0.3s ease;
+    }
+    .back-link:hover { color: var(--text-primary); }
+
+    /* --- HEADER --- */
+    .project-header { margin-bottom: 40px; }
+    .project-header h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .project-meta { font-size: 0.9rem; color: var(--text-secondary); }
+
+    /* --- CONTENT --- */
+    .content-section { margin-bottom: 40px; }
+    .content-section p {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .content-section h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      margin-top: 48px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #E5E5E5;
+      margin: 48px 0;
+    }
+
+    /* --- SUANPAN CARD --- */
+    .suanpan-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 40px 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      margin: 40px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* --- DISPLAY --- */
+    .suanpan-display {
+      background: #f0f0f2;
+      border: 1px solid #e0e0e2;
+      border-radius: 8px;
+      padding: 10px 32px;
+      margin-bottom: 28px;
+      text-align: center;
+      min-width: 280px;
+    }
+    .suanpan-display-label {
+      font-size: 9px;
+      color: var(--text-secondary);
+      letter-spacing: 4px;
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .suanpan-display-number {
+      font-size: 40px;
+      color: var(--text-primary);
+      font-family: 'DM Mono', monospace;
+      font-weight: 500;
+      letter-spacing: 2px;
+      min-width: 260px;
+    }
+
+    /* --- FRAME --- */
+    .suanpan-frame {
+      position: relative;
+      background: linear-gradient(180deg, #c8a070 0%, #b08050 30%, #a07040 70%, #8a5c30 100%);
+      border: 6px solid #6a3c18;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,230,160,0.2);
+      overflow: hidden;
+    }
+
+    .rods-layer {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .rod-wrap { width: 52px; display: flex; justify-content: center; }
+    .rod {
+      width: 4px; height: 100%;
+      background: linear-gradient(90deg, #5a3010, #9a6030 40%, #7a4820 60%, #5a3010);
+      border-radius: 2px;
+      opacity: 0.7;
+    }
+
+    .rail {
+      height: 14px;
+      background: linear-gradient(180deg, #b07848 0%, #8a5830 50%, #b07848 100%);
+      position: relative;
+      z-index: 10;
+    }
+    .rail-top  { border-bottom: 1px solid #6a3818; border-radius: 2px 2px 0 0; }
+    .rail-bottom { border-top: 1px solid #6a3818; border-radius: 0 0 2px 2px; }
+
+    .beam {
+      height: 12px;
+      background: linear-gradient(180deg, #b87808 0%, #d89818 30%, #b87808 70%, #886005 100%);
+      border-top: 1px solid #e8b828;
+      border-bottom: 1px solid #686005;
+      position: relative; z-index: 10;
+      display: flex; align-items: center;
+    }
+    .beam-dot-wrap { width: 52px; display: flex; justify-content: center; align-items: center; }
+    .beam-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fffacc, #b89010);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    .section { display: flex; position: relative; z-index: 5; }
+    .heaven-section { height: 96px; }
+    .earth-section  { height: 169px; }
+
+    .abacus-column { width: 52px; position: relative; }
+
+    .bead {
+      width: 44px; height: 22px;
+      border-radius: 50%;
+      position: absolute;
+      left: 4px;
+      cursor: pointer;
+      user-select: none;
+      transition: top 0.15s cubic-bezier(0.4,0,0.2,1), background 0.1s, box-shadow 0.1s;
+      z-index: 6;
+    }
+    .bead.active {
+      background: radial-gradient(ellipse at 35% 30%, #f0d878, #c88818 55%, #7a4808);
+      box-shadow: 0 3px 8px rgba(100,60,0,0.45), inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    .bead.inactive {
+      background: radial-gradient(ellipse at 35% 30%, #d4b090, #9a6838 55%, #6a3818);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .bead:hover { filter: brightness(1.08); }
+
+    .suanpan-labels { display: flex; margin-top: 10px; margin-bottom: 20px; }
+    .label-cell { width: 52px; display: flex; justify-content: center; }
+    .label-text { font-size: 8px; color: var(--text-secondary); font-family: 'DM Mono', monospace; }
+
+    .reset-btn {
+      padding: 8px 24px;
+      background: transparent;
+      border: 1px solid #D2D2D7;
+      color: var(--text-secondary);
+      font-family: var(--font-stack);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    .reset-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+
+    .suanpan-hint {
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      .project-header h1 { font-size: 2rem; }
+      .suanpan-card { padding: 24px 8px; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-content">
+      <a href="index.html" class="logo">kindaSharp.</a>
+      <div class="nav-links">
+        <a href="column-a.html">Column A</a>
+        <a href="column-b.html">Column B</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <a href="column-b.html" class="back-link">← Back to Column B</a>
+
+    <header class="project-header">
+      <h1>Suanpan 算盤</h1>
+      <p class="project-meta">February 2026</p>
+    </header>
+
+    <div class="content-section">
+      <p>My neighbor handed me a Chinese suanpan the other day, and one thing led to another. This is an interactive version you can use alongside the real thing. Click any bead to slide it toward the center beam; the value updates in real time.</p>
+      <p>The suanpan predates the Japanese soroban by centuries and has a slightly more generous layout: two beads above the beam worth 5 each, and five beads below worth 1 each. In practice you use 0–9 per column for everyday arithmetic, but the extra beads give you room for intermediate steps and hexadecimal calculation.</p>
+    </div>
+
+    <div class="suanpan-card">
+
+      <div class="suanpan-display">
+        <div class="suanpan-display-label">Value</div>
+        <div class="suanpan-display-number" id="display">0</div>
+      </div>
+
+      <div class="suanpan-frame" id="frame"></div>
+
+      <div class="suanpan-labels" id="labels"></div>
+
+      <button class="reset-btn" id="resetBtn">Reset</button>
+
+      <p class="suanpan-hint">Click a bead to slide it — and all beads between it and the beam</p>
+
+    </div>
+
+    <hr class="divider">
+
+    <div class="content-section">
+      <h2>How to read it</h2>
+      <p>Each column represents a digit, with the rightmost being ones, then tens, hundreds, and so on to the left. Count the beads touching the beam in each column: heaven beads contribute 5 each, earth beads contribute 1 each. So one heaven bead down and three earth beads up reads as 8 in that column.</p>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 KindaSharp. All rights reserved.</p>
+  </footer>
+
+<script>
+  const NUM_COLS = 9;
+  const BEAD_H = 22;
+  const BEAD_STEP = BEAD_H + 5;
+  const HEAVEN_H = 96;
+  const EARTH_H = 169;
+  const PLACE_LABELS = ["100M","10M","1M","100K","10K","1K","100","10","1"];
+
+  let columns = initState();
+
+  function initState() {
+    return Array.from({ length: NUM_COLS }, () => ({
+      heaven: [false, false],
+      earth: [false, false, false, false, false],
+    }));
+  }
+
+  function colValue(col) {
+    return col.heaven.filter(Boolean).length * 5 + col.earth.filter(Boolean).length;
+  }
+
+  function totalValue() {
+    return columns.reduce((sum, col, i) =>
+      sum + colValue(col) * Math.pow(10, NUM_COLS - 1 - i), 0);
+  }
+
+  function heavenTop(heaven, bi) {
+    if (bi === 1) return heaven[1] ? HEAVEN_H - BEAD_H - 4 : 4 + BEAD_STEP;
+    return heaven[0] ? HEAVEN_H - BEAD_H - 4 - BEAD_STEP : 4;
+  }
+
+  function earthTop(earth, bi) {
+    if (earth[bi]) return bi * BEAD_STEP + 4;
+    return EARTH_H - (4 - bi + 1) * BEAD_STEP + 4;
+  }
+
+  function clickHeaven(ci, bi) {
+    const h = [...columns[ci].heaven];
+    if (!h[bi]) { for (let j = bi; j < 2; j++) h[j] = true; }
+    else { for (let j = 0; j <= bi; j++) h[j] = false; }
+    columns[ci] = { ...columns[ci], heaven: h };
+    render();
+  }
+
+  function clickEarth(ci, bi) {
+    const e = [...columns[ci].earth];
+    if (!e[bi]) { for (let j = 0; j <= bi; j++) e[j] = true; }
+    else { for (let j = bi; j < 5; j++) e[j] = false; }
+    columns[ci] = { ...columns[ci], earth: e };
+    render();
+  }
+
+  function buildDOM() {
+    const frame = document.getElementById('frame');
+    frame.innerHTML = '';
+
+    const rodsLayer = document.createElement('div');
+    rodsLayer.className = 'rods-layer';
+    for (let ci = 0; ci < NUM_COLS; ci++) {
+      const wrap = document.createElement('div'); wrap.className = 'rod-wrap';
+      const rod = document.createElement('div'); rod.className = 'rod';
+      wrap.appendChild(rod); rodsLayer.appendChild(wrap);
+    }
+    frame.appendChild(rodsLayer);
+
+    const topRail = document.createElement('div');
+    topRail.className = 'rail rail-top';
+    frame.appendChild(topRail);
+
+    const heavenSection = document.createElement('div');
+    heavenSection.className = 'section heaven-section';
+    for (let ci = 0; ci < NUM_COLS; ci++) {
+      const col = document.createElement('div'); col.className = 'abacus-column';
+      for (let bi = 0; bi < 2; bi++) {
+        const bead = document.createElement('div');
+        bead.className = 'bead inactive';
+        bead.id = `h-${ci}-${bi}`;
+        bead.style.top = heavenTop(columns[ci].heaven, bi) + 'px';
+        bead.addEventListener('click', () => clickHeaven(ci, bi));
+        col.appendChild(bead);
+      }
+      heavenSection.appendChild(col);
+    }
+    frame.appendChild(heavenSection);
+
+    const beam = document.createElement('div'); beam.className = 'beam';
+    for (let ci = 0; ci < NUM_COLS; ci++) {
+      const wrap = document.createElement('div'); wrap.className = 'beam-dot-wrap';
+      const dot = document.createElement('div'); dot.className = 'beam-dot';
+      wrap.appendChild(dot); beam.appendChild(wrap);
+    }
+    frame.appendChild(beam);
+
+    const earthSection = document.createElement('div');
+    earthSection.className = 'section earth-section';
+    for (let ci = 0; ci < NUM_COLS; ci++) {
+      const col = document.createElement('div'); col.className = 'abacus-column';
+      for (let bi = 0; bi < 5; bi++) {
+        const bead = document.createElement('div');
+        bead.className = 'bead inactive';
+        bead.id = `e-${ci}-${bi}`;
+        bead.style.top = earthTop(columns[ci].earth, bi) + 'px';
+        bead.addEventListener('click', () => clickEarth(ci, bi));
+        col.appendChild(bead);
+      }
+      earthSection.appendChild(col);
+    }
+    frame.appendChild(earthSection);
+
+    const bottomRail = document.createElement('div');
+    bottomRail.className = 'rail rail-bottom';
+    frame.appendChild(bottomRail);
+
+    const labelsEl = document.getElementById('labels');
+    labelsEl.innerHTML = '';
+    for (let ci = 0; ci < NUM_COLS; ci++) {
+      const cell = document.createElement('div'); cell.className = 'label-cell';
+      const span = document.createElement('span'); span.className = 'label-text';
+      span.textContent = PLACE_LABELS[ci];
+      cell.appendChild(span); labelsEl.appendChild(cell);
+    }
+  }
+
+  function render() {
+    document.getElementById('display').textContent = totalValue().toLocaleString();
+    for (let ci = 0; ci < NUM_COLS; ci++) {
+      for (let bi = 0; bi < 2; bi++) {
+        const el = document.getElementById(`h-${ci}-${bi}`);
+        el.className = 'bead ' + (columns[ci].heaven[bi] ? 'active' : 'inactive');
+        el.style.top = heavenTop(columns[ci].heaven, bi) + 'px';
+      }
+      for (let bi = 0; bi < 5; bi++) {
+        const el = document.getElementById(`e-${ci}-${bi}`);
+        el.className = 'bead ' + (columns[ci].earth[bi] ? 'active' : 'inactive');
+        el.style.top = earthTop(columns[ci].earth, bi) + 'px';
+      }
+    }
+  }
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    columns = initState();
+    render();
+  });
+
+  buildDOM();
+  render();
+</script>
+
+</body>
+</html>
