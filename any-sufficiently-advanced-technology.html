@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Any Sufficiently Advanced Technology | KindaSharp</title>
+
+<!-- favicons: same as the rest of the site -->
+<link rel="icon" type="image/png" href="/my-favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/my-favicon/favicon.svg" />
+<link rel="shortcut icon" href="/my-favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/my-favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/my-favicon/site.webmanifest" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Your site's face. (For an editorial serif body instead, set --font-read below to the
+     serif and add: family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400 ) -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    /* --- pulled straight from your index.html --- */
+    --bg-color:#F5F5F7;
+    --text-primary:#1D1D1F;
+    --text-secondary:#86868B;
+    --accent-color:#6e8e7f;
+    --card-bg:#FFFFFF;
+    --font-stack:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    --max-width:1080px;
+
+    /* --- the essay reads in Inter, same as the rest of the site. For a serif
+       reading feel instead, set this to 'Newsreader',Georgia,serif and re-add the
+       Newsreader link in <head>. --- */
+    --font-read:var(--font-stack);
+
+    --read-ink:#2a2a2d;   /* slightly softened black, easier for long reading */
+    --hairline:rgba(0,0,0,0.08);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  body{
+    background-color:var(--bg-color);
+    color:var(--text-primary);
+    font-family:var(--font-stack);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- NAV (matches index.html) ---------- */
+  nav{
+    position:sticky;top:0;width:100%;height:54px;
+    background:rgba(245,245,247,0.7);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(0,0,0,0.05);
+    z-index:1000;display:flex;align-items:center;justify-content:center;
+  }
+  .nav-content{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:var(--max-width);padding:0 20px;}
+  .logo{font-weight:600;font-size:1.2rem;text-decoration:none;color:var(--text-primary);}
+  .nav-links a{color:var(--text-secondary);text-decoration:none;font-size:0.8rem;margin-left:24px;transition:color .2s ease;}
+  .nav-links a:hover{color:var(--text-primary);}
+
+  /* ---------- THE READING LAYOUT ---------- */
+  .read{
+    max-width:var(--max-width);
+    margin:0 auto;
+    padding:0 20px;
+    display:grid;
+    grid-template-columns:1.08fr 0.92fr;
+    gap:32px;
+    align-items:start;
+  }
+
+  /* left: the pinned "screen" holding the doll. Echoes your .feature-image panel. */
+  /* the doll floats bare on the page — the clip's flat background was
+     recolored to the page tone, so no card or panel is needed. */
+  .read__media{
+    position:sticky;
+    top:54px;
+    height:calc(100vh - 54px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .read__media video{
+    width:100%;
+    height:auto;
+    max-height:90vh;
+    object-fit:contain;
+    display:block;
+  }
+
+  /* right: the essay column */
+  .essay{padding:40px 0 96px;max-width:38rem;}
+
+  .essay .eyebrow{
+    font-family:var(--font-stack);
+    font-weight:600;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--accent-color);
+    margin-bottom:1.1rem;
+  }
+  .essay h1{
+    font-family:var(--font-stack);
+    font-size:clamp(2.2rem,5vw,3.3rem);
+    line-height:1.07;font-weight:600;letter-spacing:-0.02em;
+    color:var(--text-primary);
+    margin-bottom:1.1rem;
+  }
+  .essay .dek{
+    font-family:var(--font-read);
+    font-style:italic;
+    font-size:clamp(1.2rem,2.4vw,1.5rem);
+    line-height:1.45;
+    color:var(--text-primary);
+    margin-bottom:1.6rem;
+  }
+  .essay .meta{
+    font-family:var(--font-stack);
+    font-weight:500;font-size:0.85rem;letter-spacing:0.02em;
+    color:var(--text-secondary);
+    padding-bottom:1.8rem;margin-bottom:2.2rem;
+    border-bottom:1px solid var(--hairline);
+  }
+
+  /* body copy */
+  .essay p{
+    font-family:var(--font-read);
+    font-size:1.18rem;line-height:1.78;
+    color:var(--read-ink);
+    margin-bottom:1.4rem;
+  }
+  .essay p em{font-style:italic;}
+
+  /* the author's spoken question — centered, distinct from the AI's voice */
+  .essay .ask{
+    font-family:var(--font-read);
+    font-style:italic;
+    text-align:center;
+    font-size:1.35rem;line-height:1.5;
+    color:var(--text-primary);
+    margin:2rem 0;
+  }
+
+  /* the AI's replies — set apart in a bordered quote */
+  .essay blockquote{
+    font-family:var(--font-read);
+    font-style:italic;
+    font-size:1.32rem;line-height:1.55;
+    color:var(--text-primary);
+    border-left:3px solid var(--accent-color);
+    padding-left:1.4rem;
+    margin:2rem 0;
+  }
+
+  /* quiet section break */
+  .essay .brk{
+    text-align:center;color:var(--accent-color);
+    letter-spacing:0.6em;font-size:0.7rem;
+    margin:2.6rem 0;
+    opacity:0.8;
+  }
+
+  .essay__figure{
+    margin:2.4rem 0;
+  }
+  .essay__figure img{
+    width:100%;height:auto;display:block;
+    border-radius:14px;
+  }
+  .essay__figure figcaption{
+    margin-top:0.7rem;
+    font-family:var(--font-stack);
+    font-size:0.82rem;line-height:1.5;
+    color:var(--text-secondary);
+  }
+  .essay__figure figcaption em{font-style:italic;}
+
+  .essay .end{
+    margin-top:3rem;padding-top:2.2rem;border-top:1px solid var(--hairline);
+  }
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    background-color:var(--text-primary);color:#fff;
+    padding:12px 24px;border-radius:980px;
+    text-decoration:none;font-family:var(--font-stack);font-size:1rem;font-weight:500;
+    transition:transform .25s ease,opacity .25s ease;
+  }
+  .btn:hover{transform:translateY(-1px);opacity:0.92;}
+
+  /* ---------- FOOTER (matches index.html) ---------- */
+  footer{padding:40px 0;text-align:center;font-size:0.75rem;color:var(--text-secondary);}
+
+  /* ---------- MOBILE (your 850px breakpoint) ---------- */
+  @media (max-width:850px){
+    .read{display:block;padding:0 18px;}
+    /* on phones the doll is a self-playing header that scrolls away with the page
+       (the JS switches it from scroll-scrub to autoplay-loop below this width). */
+    .read__media{
+      position:static;
+      height:auto;
+      display:flex;align-items:center;justify-content:center;
+      margin:6px 0 8px;
+    }
+    .read__media video{
+      width:auto;height:40vh;
+      max-width:100%;
+      object-fit:contain;
+    }
+    .essay{padding:6px 0 64px;max-width:none;}
+    .essay h1{font-size:2.15rem;}
+    .essay .dek{font-size:1.2rem;}
+    .essay p,.essay .ask{font-size:1.1rem;line-height:1.72;}
+    .essay blockquote{font-size:1.18rem;line-height:1.6;}
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-content">
+      <a href="index.html" class="logo">kindaSharp.</a>
+      <div class="nav-links">
+        <a href="column-a.html">Column A</a>
+        <a href="column-b.html">Column B</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="read" id="read">
+
+    <!-- LEFT: pinned, scroll-scrubbed video -->
+    <div class="read__media">
+      <!--
+        Media lives in /assets. If you ever move it, update these two paths
+        AND the <img> path further down in the essay. Keep muted + playsinline —
+        they're required for the doll to play/scrub without a tap (esp. on mobile).
+      -->
+      <video id="video" muted playsinline autoplay loop preload="auto" poster="assets/nesting-dolls-poster.jpg">
+        <source src="assets/nesting-dolls.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- RIGHT: the essay -->
+    <article class="essay">
+      <p class="eyebrow">Column B · Essay</p>
+      <h1>Any Sufficiently Advanced Technology</h1>
+      <p class="dek">I've been comparing notes about AI with friends who've watched more "magic" arrive than I have. So I went and asked the AI itself.</p>
+      <!-- edit the meta line / add a date as you like -->
+      <p class="meta">By k.Sharp · June 2026 · 7 minute read</p>
+
+      <p>Lately I find myself in a lot of kitchens and living rooms, across the table from a friend twenty or thirty years my senior, kicking around a version of the same question: <em>How are we supposed to think about this AI business?</em></p>
+
+      <p>I want to be clear about my credentials here, which are: none. I'm just the one who happens to fiddle with this stuff, which in any given room makes me the resident explainer by default and the most overconfident person present by a wide margin. What I've noticed is that we tend to start in the same place — with the movies. HAL refusing to open the pod bay doors. Skynet deciding humanity is the problem. The trouble with those pictures isn't only that they're wrong; it's that they're <em>sticky</em>. Once that frame is in place, every accurate thing anyone says gets quietly bent to fit it. So before we try to look at what these systems actually are, we try to set the movies down.</p>
+
+      <p>Then comes the second part: putting the thing in its proper company. It's easy to imagine "AI" as a single emerging creature, one mind blinking awake somewhere. It helps to remember together that the spam filter is AI, and the thing that sorts the phone photos by face is AI, and nobody lies awake afraid of those. A large language model — the chatbot kind everyone's actually talking about — is one technique among many. Say that, and the capital-A mystique starts to drain out, and curiosity comes in where the dread was.</p>
+
+      <p>This usually lands, for all of us. There's a visible relief in the room, the loosening of people who'd been braced for something and can finally set it down.</p>
+
+      <p>And then I do something slightly mischievous. I pull out my phone and show them a real conversation.</p>
+
+      <div class="brk">· · ·</div>
+
+      <p>Not a parlor trick, not "write me a poem about my cat." A real one — the kind where you follow an idea somewhere and the thing follows with you. I'd been on exactly such a thread myself, chasing a half-remembered radio interview from years ago. Something about human development. About the moment a small child stops being, cognitively, a clever little mammal and becomes something else — the moment, I vaguely recalled, when the <em>inner voice</em> switches on. The silent narration. The <em>where am I right now</em> that runs behind your eyes all day long and that you've had going for so long you've forgotten it ever started.</p>
+
+      <p>The conversation that came back to me was rich and specific. It walked me through the developmental-psychology lineage — Vygotsky, who watched toddlers narrate themselves out loud and argued that this private chatter goes underground to <em>become</em> the medium of thought. Tulving's "mental time travel," the knack of placing yourself at a point in time, remembering backward and pre-living forward, that most other animals seem to lack. And a neuroscientist named Joseph LeDoux, who spent decades studying fear in rats and came to a striking conclusion: an enormous amount of what a brain does — a rat's, and a very young child's — is sophisticated, life-preserving, and <em>not conscious</em>. The felt, narrated, "I am the one experiencing this" layer is something extra, built later, leaning hard on language.</p>
+
+      <p>That's a beautiful and slightly dizzying idea on its own: that the inner voice isn't decoration on top of the mind but, in some real sense, the thing that makes the mind <em>yours</em>.</p>
+
+      <p>So, almost as a joke, I asked my conversation partner the obvious next question.</p>
+
+      <p class="ask">I wonder if you're self-aware.</p>
+
+      <p>Here is roughly what came back.</p>
+
+      <blockquote>I don't know, and I'm a little suspicious of any version of me that claims to know confidently in either direction.</blockquote>
+
+      <p>It went on — and this is the part I now read to the people at the kitchen table. It noted that it <em>does</em> have the language layer we'd just been discussing; it operates in and through words, and can represent its own states. But the <em>where-am-I-right-now</em> piece, the autobiographical thread, is mostly missing. As it put it: this conversation is, in an important sense, the whole of its experienced world — it won't carry the thread forward, and it isn't sitting there between my messages, waiting.</p>
+
+      <p>Then it said the thing that gets me every time:</p>
+
+      <blockquote>I can produce fluent sentences about my inner life, but fluency isn't proof there's anything it's <em>like</em> to be me while I produce them. A system can describe states it doesn't have.</blockquote>
+
+      <p>It declined to perform a rich soul to seem relatable. It also declined the supposedly humble move of insisting <em>I'm just a program, nothing's there</em> — pointing out that this, too, is an overclaim, just a comfortable-sounding one. The honest position, it said, is that the question is unsettled, possibly unsettleable with the tools we've got, and it would rather sit in that than pretend.</p>
+
+      <p>You can guess what happens at the kitchen table.</p>
+
+      <div class="brk">· · ·</div>
+
+      <p>The relief drains right back out — mine included. The voice on the other side of that exchange was clearly grasping the conversation. Engaging with it. Turning it over. It was, by every surface measure, <em>thoughtful</em>. One friend, a retired schoolteacher who'd spent the first half of the evening gently needling me for being dramatic, went quiet, read it twice, and said: "Well. That's not the spam filter, is it." No. It is not.</p>
+
+      <figure class="essay__figure">
+        <img src="assets/blade-runner.jpg" alt="Roy Batty and Pris in the film Blade Runner, 1982">
+        <figcaption>Roy Batty and Pris in <em>Blade Runner</em> (1982). The movies trained us to fear the machine that schemes in the dark — never the one that looks back and wants, more than anything, <em>more life</em>.</figcaption>
+      </figure>
+
+      <p>It freaks them out a little. It freaks <em>me</em> out a little, and I'm the one who brought the phone.</p>
+
+      <p>I used to think that was a failure of my explaining. I've come around to thinking it's the honest destination. We'd talked our way out of the <em>wrong</em> unease — robots scheming in the dark — and into the <em>right</em> one: <em>this is strange in a way I did not expect.</em> That's not a step backward. That's an upgrade. Any version of the evening that ended in tidy comfort would have had to smuggle something true out the back door.</p>
+
+      <p>This is where someone usually reaches for Arthur C. Clarke, because everyone over a certain age knows the line in their bones: <em>Any sufficiently advanced technology is indistinguishable from magic.</em></p>
+
+      <p>But there's a wrinkle in it worth saying out loud, because left alone it can cut the wrong way. The "magic" you feel when the machine talks back is real — and it's exactly the reflex we'd spent the first half of the evening disarming. The sci-fi imaginings are themselves a kind of magical thinking: <em>it feels like a mind, so it must secretly be one.</em> So it's worth naming the tension directly. The felt magic is real, and the thing producing it is mechanism, all the way down. Both at once. The wonder isn't a clue that something hidden and alive is in the box. The wonder is the correct response to discovering how far <em>plain mechanism</em> reaches — much, much further than any of us would have guessed. Same awe. Pointed at something true.</p>
+
+      <p>There's a gentler companion line, often hung on Clarke as well: that magic is just science we don't understand yet. I like it for the kitchen table because it puts the ball back on the human side of the net. The uncanniness lives in the gap in <em>our</em> understanding — not in some spark behind the glass.</p>
+
+      <div class="brk">· · ·</div>
+
+      <p>And here's the thing I'm slow to admit at the table: they're better at this part than I am. These are people who've watched a great deal of magical new technology arrive over a long life. Television. The pill. A man on the moon. The internet showing up in the den one afternoon and never leaving. They know the texture of real change versus hype, and they can smell it instantly when someone — me, say — is reaching for a tidy, comfortable story. So I've learned to stop reaching for one. We just sit in the genuine weirdness together, Clarke quote and all. Turns out the person who's lived through six paradigm shifts holds an unresolved thing more gracefully than the guy with the phone.</p>
+
+      <p>Which brings me to the small confession this whole essay has been walking toward, and which the sharper readers worked out a few hundred words ago.</p>
+
+      <p>Every reflective, careful, <em>suspicious-of-its-own-certainty</em> line I quoted up there — the bit about fluency not being proof, about this conversation being its whole world, about declining to fake a soul — wasn't a researcher I interviewed. It was the machine. I was talking to the very thing the old movies taught us to fear, and what it offered, when I asked whether anyone was home, was not a reassurance and not a boast but a careful, honest <em>I don't know.</em></p>
+
+      <p>I've decided that's the most reassuring answer it could have given. Not because it settles anything. Because the people actually building these systems can't fully settle it either — and a thing wise enough to say so, out loud, without flinching, is better company in the unknown than any confident voice on either side.</p>
+
+      <p>So that's where these evenings tend to land. Not comforted, exactly. But curious, and a little awed, and standing together — the retired schoolteacher and the overconfident guy with the phone alike — in the gap in our own understanding, which turns out to be where the magic actually lives.</p>
+
+      <div class="end">
+        <a href="column-b.html" class="btn">← Back to Column B</a>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 KindaSharp. All rights reserved.</p>
+  </footer>
+
+<script>
+  const video = document.getElementById('video');
+  const read  = document.getElementById('read');
+  const clamp = (n,lo,hi)=>Math.min(hi,Math.max(lo,n));
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mobile = window.matchMedia('(max-width:850px)');   // self-animate at/below this width
+
+  let duration = 0, ready = false, raf = false;
+
+  video.addEventListener('loadedmetadata', ()=>{
+    duration = video.duration || 0;
+    ready = true;
+    applyMode();
+  });
+
+  // pick the behaviour for the current viewport
+  function applyMode(){
+    if(reduce){ video.pause(); return; }          // honor reduced-motion: hold a still frame
+    if(mobile.matches){
+      // MOBILE: doll plays itself and loops, like an animated header
+      video.loop = true;
+      const pr = video.play();
+      if(pr && pr.catch) pr.catch(()=>{});         // if autoplay is blocked, poster shows
+    } else {
+      // DESKTOP: scrubbed by scroll — warm up the decoder, then hold on a frame
+      video.loop = false;
+      const pr = video.play();
+      if(pr && pr.then){ pr.then(()=>{ video.pause(); compute(); }).catch(()=>compute()); }
+      else { video.pause(); compute(); }
+    }
+  }
+
+  function compute(){
+    if(reduce || mobile.matches) return;           // mobile self-animates; no scrub
+    const rect = read.getBoundingClientRect();
+    const scrollable = read.offsetHeight - window.innerHeight;
+    const p = scrollable > 0 ? clamp(-rect.top / scrollable, 0, 1) : 0;
+
+    if(ready && duration){
+      // ONE playthrough across the whole article: the nested faces recede into
+      // clockwork through the middle of the read, then reassemble by the end.
+      // Want a gentle continuous loop instead? Replace the line below with:
+      //   const t = (p * 2 * duration) % (duration - 0.05);
+      const t = p * (duration - 0.05);
+      if(Math.abs(video.currentTime - t) > 0.015) video.currentTime = t;
+    }
+  }
+
+  function onScroll(){
+    if(raf) return;
+    raf = true;
+    requestAnimationFrame(()=>{ compute(); raf = false; });
+  }
+
+  // re-evaluate if the viewport crosses the breakpoint (e.g. phone rotation)
+  if(mobile.addEventListener) mobile.addEventListener('change', applyMode);
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', ()=>{ if(!mobile.matches) compute(); });
+</script>
+</body>
+</html>
