@@ -370,7 +370,7 @@
       // clockwork through the middle of the read, then reassemble by the end.
       // Want a gentle continuous loop instead? Replace the line below with:
       //   const t = (p * 2 * duration) % (duration - 0.05);
-      const t = (p * 3 * duration) % (duration - 0.05);
+      const t = (p * 4 * duration) % (duration - 0.05);
       if(Math.abs(video.currentTime - t) > 0.015) video.currentTime = t;
     }
   }
